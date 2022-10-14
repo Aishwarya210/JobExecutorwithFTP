@@ -1,0 +1,8 @@
+---
+app: 
+  salesconnect:
+    oncall:
+      scheduler:
+       cron: 0 0 20 * * *
+       fixedRate: 10000
+environment: testing      

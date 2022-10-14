@@ -1,0 +1,107 @@
+replicaCount: 1
+name: hca-biz-directorycachebuilder
+labels:
+  app.kubernetes.io/managed-by-NUID: Q540870
+image:
+  repository: docker-dev-local.devopsrepo.kp.org/cdtsvideovisit/hca-biz-directorycachebuilder
+  tag: 0.0.1
+  pullPolicy: IfNotPresent
+  labels:
+    app: frontend-or-api
+  containerPort: 8080
+env:
+- name: KP_SERVICE_NAME
+  value: hca-biz-directorycachebuilder
+- name: KPCONFIG_PROFILE
+  value: uat2
+- name: KPCONFIG_LABEL
+  value: rel_GR_10.1.0
+- name: KPCONFIG_NAME
+  value: hcakpconfig
+- name: KPCONFIG_URI
+  valueFrom:
+    secretKeyRef:
+      name: hcakpconfig
+      key: KPCONFIG_URI
+- name: KPCONFIG_USER
+  valueFrom:
+    secretKeyRef:
+      name: hcakpconfig
+      key: KPCONFIG_USER
+- name: KPCONFIG_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: hcakpconfig
+      key: KPCONFIG_PASSWORD
+- name: KPCONFIG_ACCESSTOKEN
+  valueFrom:
+    secretKeyRef:
+      name: hcakpconfig
+      key: KPCONFIG_ACCESSTOKEN
+- name: LOG_LEVEL
+  value: error
+- name: JBP_CONFIG_SPRINGAUTORECONFIGURATION
+  value: 'enabled: false'
+- name: JBP_LOG_LEVEL
+  value: WARN
+- name: REDIS_USER_PROV
+  valueFrom:
+    secretKeyRef:
+      name: redisseccredb002
+      key: redis_user_b002
+- name: REDIS_FQDN_PROV
+  valueFrom:
+    secretKeyRef:
+      name: redisseccredb002
+      key: redis_fqdn_b002
+- name: REDIS_KEY_PROV
+  valueFrom:
+    secretKeyRef:
+      name: redisseccredb002
+      key: redis_secondarykey_b002
+- name: EVENTHUB_NAMESPACE_PRIMARY_CONNECTION_PROV
+  valueFrom:
+    secretKeyRef:
+      name: eventhubseccredke01
+      key: eventhub_namespace_primaryConnectionString_ke01
+- name: EVENTHUB_NAMESPACE_SERVICEBUSENDPOINT_KEY_PROV
+  valueFrom:
+    secretKeyRef:
+      name: eventhubseccredke01
+      key: eventhub_namespace_serviceBusEndpoint_ke01
+livenessProbe:
+  enabled: true
+  httpGet:
+    port: 8080
+    path: /livenessprobe
+  initialDelaySeconds: 90
+  periodSeconds: 90
+readinessProbe:
+  enabled: true
+  httpGet:
+    port: 8080
+    path: /health
+  initialDelaySeconds: 10
+  periodSeconds: 15
+configmap:
+  enabled: false
+resources:
+  limits:
+    cpu: 500m
+    memory: 1024Mi
+  requests:
+    cpu: 500m
+    memory: 1024Mi
+service:
+  port: 80
+  targetPort: 8080
+ingress:
+  enabled: false
+nameOverride: ''
+fullnameOverride: ''
+nodeSelector: {
+  }
+tolerations: [
+  ]
+affinity: {
+  }

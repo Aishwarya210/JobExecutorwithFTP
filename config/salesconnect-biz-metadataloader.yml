@@ -1,0 +1,54 @@
+---
+eventhub_namespace_defaultport_ke01: 9093
+
+app: 
+  hca:
+    oncall:
+      scheduler:
+        fixedDelay: 300000
+        key:
+          expiration: 0       
+      redis: 
+          data:
+            expiry:  
+              additionalMS: 691200000
+            order: 
+              divisor: 100 
+            count: 
+              tracking:
+                expiry: 864000000
+      topic: 
+        stream: 
+          out: oncall.in.v1
+    directory:
+      
+      topic: 
+        stream: 
+          out: directory.out.v1
+          reg:
+            in: directory.reg.in.v1
+      cortext:
+        topic:
+          stream:
+            out: cortext.out.v1          
+    data:
+     physician:
+      employeeType: Physician
+ 
+  regionkeymap: 
+      MAS: MAS
+      SCAL: SCAL
+      CO: CO
+      HI: HI
+      NW: NW
+      GA: GA
+      NCAL: NCAL
+      WA: WA
+      NAT: NAT
+      NATIONAL: NATIONAL
+      ALL: ALL 
+
+info:
+  javaEnv: ${spring.profiles.active}
+  cfInstanceIndex: ${CF_INSTANCE_INDEX}
+  version : ${BUILD_VERSION}    

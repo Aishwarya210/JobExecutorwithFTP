@@ -1,0 +1,60 @@
+openapi: 3.0.1
+servers:
+  - url: 'https://{env}-salesconnect-biz-metadataloader.{domain}'
+    description: API server
+    variables:
+      env:
+        enum:
+          - dev
+          - qa
+          - perf
+          - preprod
+          - prod
+        default: dev
+        description: 'this value is assigned by the service provider, in this example `dev-salesconnect-biz-metadataloader.com`'
+      domain:
+        enum:
+          - kpsj001.us-west.mybluemix.net
+          - hca.int-svc-bmxnp.appl.kp.org
+        default: kpsj001.us-west.mybluemix.net
+info:
+  title: biz-metadataloader
+  description: This is the Open API specificaition for salesconnect-biz-metadataloader. 
+  version: 1.0.0   
+paths:
+  '/health':
+    get:
+      summary: Gets health of application
+      operationId: getHealth
+      responses:
+        '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Health'
+        '503':
+          description: Required Service is Temporarily Unavailable. Please try again after sometime
+          content:
+            application/json:
+              schema:
+                type: object             
+components:
+  schemas:
+    Health:
+      type: object
+      description: Health
+      required:
+        - status
+        - cfInstanceIndex
+        - nodeEnv
+        - lastUpdatedAt
+      properties:
+        cfInstanceIndex:
+          type: number
+        lastUpdatedAt:
+          type: string
+        nodeEnv:
+          type: string
+        status:
+          type: string

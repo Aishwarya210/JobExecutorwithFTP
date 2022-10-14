@@ -1,0 +1,91 @@
+replicaCount: 1
+name: salesconnect-biz-metadataloader
+
+image:
+  repository: docker-dev-local.devopsrepo.kp.org/cdtsvideovisit/salesconnect-biz-metadataloader
+  tag: 0.0.1
+  pullPolicy: IfNotPresent
+  labels:
+    app: frontend-or-api
+  containerPort: 8080
+env:
+- name: KP_SERVICE_NAME
+  value: salesconnect-biz-metadataloader
+- name: KPCONFIG_PROFILE
+  value: dev1
+- name: KPCONFIG_LABEL
+  value: az-master
+- name: KPCONFIG_NAME
+  value: hcakpconfig
+- name: KPCONFIG_URI
+  valueFrom:
+    secretKeyRef:
+      name: hcakpconfig
+      key: KPCONFIG_URI
+- name: KPCONFIG_USER
+  valueFrom:
+    secretKeyRef:
+      name: hcakpconfig
+      key: KPCONFIG_USER
+- name: KPCONFIG_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: hcakpconfig
+      key: KPCONFIG_PASSWORD
+- name: KPCONFIG_ACCESSTOKEN
+  valueFrom:
+    secretKeyRef:
+      name: hcakpconfig
+      key: KPCONFIG_ACCESSTOKEN
+- name: LOG_LEVEL
+  value: error
+- name: JBP_CONFIG_SPRINGAUTORECONFIGURATION
+  value: 'enabled: false'
+- name: JBP_LOG_LEVEL
+  value: WARN
+- name: EVENTHUB_NAMESPACE_PRIMARY_CONNECTION_PROV
+  valueFrom:
+    secretKeyRef:
+      name: eventhubseccredke01
+      key: eventhub_namespace_primaryConnectionString_ke01
+- name: EVENTHUB_NAMESPACE_SERVICEBUSENDPOINT_KEY_PROV
+  valueFrom:
+    secretKeyRef:
+      name: eventhubseccredke01
+      key: eventhub_namespace_serviceBusEndpoint_ke01
+livenessProbe:
+  enabled: true
+  httpGet:
+    port: 8080
+    path: /livenessprobe
+  initialDelaySeconds: 90
+  periodSeconds: 90
+readinessProbe:
+  enabled: true
+  httpGet:
+    port: 8080
+    path: /health
+  initialDelaySeconds: 10
+  periodSeconds: 15
+configmap:
+  enabled: false
+resources:
+  limits:
+    cpu: 500m
+    memory: 1024Mi
+  requests:
+    cpu: 500m
+    memory: 1024Mi
+service:
+  port: 80
+  targetPort: 8080
+ingress:
+  enabled: false
+nameOverride: ''
+fullnameOverride: ''
+nodeSelector: {
+  }
+tolerations: [
+  ]
+affinity: {
+  }
